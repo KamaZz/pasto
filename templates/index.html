@@ -18,4 +18,8 @@
     <div class="col-xs-6 result"></div>
 </div>
 
+<script type="text/javascript">
+$('iframe').height($(window).height()/1.25)
+$('body>nav>form>button').on('click',function(){$('iframe').attr('src',"getPage.php?url="+$('input').val());});
+</script>
 {% endblock %}
