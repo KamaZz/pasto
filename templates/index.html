@@ -21,5 +21,39 @@
 <script type="text/javascript">
 $('iframe').height($(window).height()/1.25)
 $('body>nav>form>button').on('click',function(){$('iframe').attr('src',"getPage.php?url="+$('input').val());});
+$('iframe').on('load',function(){
+    $('iframe').contents().find('*').hover(function(e){
+        $(this).css('outline','1px solid red');
+        selector = getElementSelector($(this));
+        $('.result').text($(selector, $('iframe').contents()).text());
+        $('.selector').text(selector);
+    },function(){
+        $(this).css('outline','none');
+    });
+});
+function getElementSelector(element) {
+    return $(element).parents().addBack().map(function() {
+        var $this = $(this);
+        var tagName = this.nodeName.toLowerCase();
+
+        tagName += getElementId($this);
+        tagName += getElementClass($this);
+
+        if ($this.siblings(tagName).length > 0) {
+            tagName += ":eq(" + ($this.prevAll(tagName).length) + ")";
+        }
+        return tagName;
+    }).get().join(">");
+}
+function getElementId(element) {
+    if ( $(element).attr('id') )
+        return "#" + $(element).attr('id');
+    return '';
+}
+function getElementClass(element) {
+    if ( $(element).attr('class') )
+        return "." + $.trim( $(element).attr('class') ).replace(/\s/gi, ".");
+    return '';
+}
 </script>
 {% endblock %}
